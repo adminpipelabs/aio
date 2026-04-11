@@ -6,11 +6,32 @@ const path = require('path');
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static('build'));
 
+// Serve static files from build folder
+const buildPath = path.join(__dirname, 'build');
+const buildExists = require('fs').existsSync(buildPath);
+
+if (!buildExists) {
+  console.error('❌ ERROR: /build folder not found!');
+  console.error('   Run: npm run build');
+  process.exit(1);
+}
+
+app.use(express.static(buildPath));
+
+// SPA fallback
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  const indexPath = path.join(buildPath, 'index.html');
+  res.sendFile(indexPath);
+});
+
+// API Routes
 app.post('/api/subscribe', async (req, res) => {
   const { email, zipCode } = req.body;
-  const entry = { email, zipCode, timestamp: new Date().toISOString(), type: 'customer' };
+  const entry = { email, zipCode, timestamp: new Date().toISOString() };
   const filePath = path.join(__dirname, 'data', 'emails.json');
   try {
     let data = [];
@@ -19,8 +40,9 @@ app.post('/api/subscribe', async (req, res) => {
       data = JSON.parse(existing);
     } catch (e) {}
     data.push(entry);
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
     await fs.writeFile(filePath, JSON.stringify(data, null, 2));
-    console.log('New signup:', email, zipCode);
+    console.log('✉️  New signup:', email, zipCode);
     res.json({ success: true });
   } catch (error) {
     console.error('Error:', error);
@@ -42,8 +64,8 @@ app.get('/api/admin/emails', async (req, res) => {
   }
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log('✅ Aio server running on port ' + PORT);
-  console.log('🌐 Open http://87.99.155.192 in your browser');
+  console.log('🌐 Open http://localhost:' + PORT + ' in your browser');
 });
