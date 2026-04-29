@@ -1,32 +1,24 @@
-const express = require('express');
-const cors = require('cors');
-const fs = require('fs').promises;
-const path = require('path');
+import 'dotenv/config';
+import express from 'express';
+import { promises as fs } from 'fs';
+import { existsSync } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-app.use(cors());
+
 app.use(express.json());
 
-// Serve static files from build folder
-const buildPath = path.join(__dirname, 'build');
-const buildExists = require('fs').existsSync(buildPath);
-
-if (!buildExists) {
-  console.error('❌ ERROR: /build folder not found!');
+// Serve static files from Vite build output
+const distPath = path.join(__dirname, 'dist');
+if (!existsSync(distPath)) {
+  console.error('❌ ERROR: /dist folder not found!');
   console.error('   Run: npm run build');
   process.exit(1);
 }
 
-app.use(express.static(buildPath));
-
-// SPA fallback
-app.get('/{*path}', (req, res, next) => {
-  if (req.path.startsWith('/api')) {
-    return next();
-  }
-  const indexPath = path.join(buildPath, 'index.html');
-  res.sendFile(indexPath);
-});
+app.use(express.static(distPath));
 
 // API Routes
 app.post('/api/subscribe', async (req, res) => {
@@ -38,7 +30,7 @@ app.post('/api/subscribe', async (req, res) => {
     try {
       const existing = await fs.readFile(filePath, 'utf8');
       data = JSON.parse(existing);
-    } catch (e) {}
+    } catch (_) {}
     data.push(entry);
     await fs.mkdir(path.dirname(filePath), { recursive: true });
     await fs.writeFile(filePath, JSON.stringify(data, null, 2));
@@ -59,13 +51,18 @@ app.get('/api/admin/emails', async (req, res) => {
     const filePath = path.join(__dirname, 'data', 'emails.json');
     const data = await fs.readFile(filePath, 'utf8');
     res.json({ emails: JSON.parse(data) });
-  } catch (error) {
+  } catch (_) {
     res.json({ emails: [] });
   }
 });
 
+// SPA fallback
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log('✅ Aio server running on port ' + PORT);
-  console.log('🌐 Open http://localhost:' + PORT + ' in your browser');
+  console.log(`✅ Aio server running on port ${PORT}`);
+  console.log(`🌐 Open http://localhost:${PORT} in your browser`);
 });
