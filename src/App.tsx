@@ -434,7 +434,7 @@ export default function App() {
               <li>hello@aionreserve.com</li>
               <li>
                 <a
-                  href="https://instagram.com/aio_ivtherapy"
+                  href="https://instagram.com/AION_Reserve"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-electric-cyan transition-colors"
@@ -444,7 +444,7 @@ export default function App() {
               </li>
               <li>
                 <a
-                  href="https://tiktok.com/@aio_ivtherapy"
+                  href="https://tiktok.com/@AION_Reserve"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-electric-cyan transition-colors"
