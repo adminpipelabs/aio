@@ -20,7 +20,7 @@ if (!buildExists) {
 app.use(express.static(buildPath));
 
 // SPA fallback
-app.get('*', (req, res, next) => {
+app.get('/{*path}', (req, res, next) => {
   if (req.path.startsWith('/api')) {
     return next();
   }
