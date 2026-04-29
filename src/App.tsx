@@ -88,7 +88,7 @@ export default function App() {
             <Fingerprint className="w-4 h-4 text-electric-cyan" />
           </div>
           <span className="font-sans text-xs tracking-[0.5em] uppercase font-light">
-            Aio <span className="text-electric-cyan font-medium">Reserve</span>
+            Aion <span className="text-electric-cyan font-medium">Reserve</span>
           </span>
         </div>
 
@@ -401,7 +401,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-20">
           <div className="col-span-1 md:col-span-2">
             <span className="font-sans text-xs tracking-[0.5em] uppercase font-light block mb-10">
-              Aio <span className="text-electric-cyan">Reserve</span>
+              Aion <span className="text-electric-cyan">Reserve</span>
             </span>
             <p className="text-white/20 text-[10px] uppercase tracking-[0.3em] leading-relaxed max-w-sm">
               Biological systems are vulnerable to time. We provide the
@@ -458,7 +458,7 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto mt-32 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between gap-10">
           <p className="font-mono text-[8px] text-white/10 uppercase tracking-[0.4em]">
-            Auth: 0922-XFB-CORE // © 2026 Aio by Pipe Labs LLC
+            Auth: 0922-XFB-CORE // © 2026 Aion by Pipe Labs LLC
           </p>
           <div className="flex gap-12">
             {["Terms", "Privacy", "HIPAA"].map((link) => (

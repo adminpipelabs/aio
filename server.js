@@ -63,6 +63,6 @@ app.get('*', (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`✅ Aio server running on port ${PORT}`);
+  console.log(`✅ Aion server running on port ${PORT}`);
   console.log(`🌐 Open http://localhost:${PORT} in your browser`);
 });
